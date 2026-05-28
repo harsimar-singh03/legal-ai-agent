@@ -11,7 +11,7 @@ client = Groq(api_key=os.getenv("GROQ_API_KEY"))
 def extract_clauses(text):
     # Split document by paragraph
     clauses = text.split("\n\n")
-    # Remove empty spaces
+   
     clean_clauses = []
     for clause in clauses:
         clause = clause.strip()
@@ -22,14 +22,14 @@ def extract_clauses(text):
 def document_analyser(state: AgentState):
     print("===== DOCUMENT ANALYSER NODE EXECUTED =====")
     if not state.document_text:
-        return state   # nothing to analyze
+        return state  
 
     # Extract clauses
     clauses = extract_clauses(state.document_text)
     if not clauses:
         return state
 
-    # Build law context from retrieved chunks (if any)
+    # Build law context from retrieved chunks 
     law_context = ""
     if state.retrieved_chunks:
         law_parts = []
@@ -43,7 +43,7 @@ def document_analyser(state: AgentState):
 
         law_context = "\n\n".join(law_parts)
 
-    # Prompt for the LLM
+   
     prompt = f"""
 You are a legal contract reviewer. Review the following clauses from a document against the provided legal context (if any). For each clause, determine:
 
@@ -55,12 +55,12 @@ You are a legal contract reviewer. Review the following clauses from a document 
 Legal context (from retrieved law):
 {law_context if law_context else "None available – base your review on general Indian contract fairness principles."}
 
-Clauses to review:
+Clauses to review :
 {json.dumps(clauses, indent=2)}
 
 Return a JSON object with:
 - flagged_clauses: a list of objects, each with: clause_text, risk_level, explanation, conflicting_section (or null if no specific section).
-- summary: a 2‑3 sentence overall assessment of whether it's safe to sign this document.
+- summary: a 2 to 3 sentence overall assessment of whether it's safe to sign this document.
 """
     messages = []
     # Include conversation history (optional for context)
@@ -76,7 +76,7 @@ Return a JSON object with:
     )
 
     raw = response.choices[0].message.content
-    print("DEBUG document analyser raw output:", raw[:500])   # debug
+    print("DEBUG document analyser raw output:", raw[:500])   
 
     data = json.loads(raw)
     result = DocumentAnalysisOutput(**data)
@@ -89,7 +89,8 @@ Return a JSON object with:
         )
     # Save summary
     state.action_output = result.summary
-    # Save assistant response in memory
+    
+    
     state.messages.append({
         "role": "assistant",
         "content": raw

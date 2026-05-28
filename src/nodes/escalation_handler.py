@@ -8,7 +8,7 @@ def escalation_handler(state: AgentState):
             "such situations."
         )
 
-    # ── 2. Build a tailored checklist for the lawyer ──
+   
     checklist = ""
 
     # Add location
@@ -65,7 +65,7 @@ def escalation_handler(state: AgentState):
 
     # General must‑bring items
     checklist += (
-        "- 🗂️ **Key documents to collect:**\n"
+        "-  **Key documents to collect:**\n"
         "   • Any written agreement, contract, or notice you received.\n"
         "   • Proof of payments, receipts, bank statements.\n"
         "   • Identity proof (Aadhaar, PAN, etc.) and address proof.\n"
@@ -74,7 +74,7 @@ def escalation_handler(state: AgentState):
 
     # ── 3. Compose the final message ──
     message = f"""
-⚠️  **This case requires a licensed advocate.**
+ **This case requires a licensed advocate.**
 
 **Why?**
 {reason}
@@ -97,7 +97,7 @@ def escalation_handler(state: AgentState):
 ### 📋 What to share with your lawyer
 {checklist}
 
-### 🛡️ Important reminder
+### Important reminder
 This automated system is a **first‑aid tool**, not a substitute for professional legal advice.  
 Do **not** take any legal action based solely on this message. A qualified advocate will review your situation in full and guide you through the correct legal process.
 """

@@ -44,10 +44,10 @@ Return ONLY a JSON object with:
   "clarification_question": null
 }}
 """
-        # Place system prompt at index 0
+        
         messages = [{"role": "system", "content": system_prompt}]
         
-        # Then append conversation history
+        
         for msg in state.messages:
             messages.append({"role": msg["role"], "content": msg["content"]})
 

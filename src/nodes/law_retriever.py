@@ -8,7 +8,7 @@ from state import AgentState
 
 load_dotenv()
 
-# Initialize clients once
+
 qdrant = QdrantClient(url=os.getenv("QDRANT_URL"), api_key=os.getenv("QDRANT_API_KEY"))
 model = SentenceTransformer("all-MiniLM-L6-v2")
 tavily = TavilyClient(api_key=os.getenv("TAVILY_API_KEY"))
@@ -34,21 +34,21 @@ def search_qdrant(query_vec, query_filter, top_k=8):
     return results
 
 def law_retriever(state: AgentState):
-    # Only skip if chunks are already present AND we are not in retry mode
+    
     if state.retrieved_chunks and not state.retry_mode:
         return state
 
-    # 1. Build query text
+   
     query_text = state.user_query
     if state.document_text:
         query_text += " " + state.document_text[:1000]
 
-    # 2. Build metadata filters – include both the specific state and "India" for central acts
+    
     query_filter = None
     if not state.retry_mode:
         must_conditions = []
 
-        # Jurisdiction filter: match the detected state OR "India" (central laws)
+       
         if state.jurisdiction and state.jurisdiction.get("state"):
             must_conditions.append(
                 FieldCondition(
@@ -65,14 +65,14 @@ def law_retriever(state: AgentState):
 
         query_filter = Filter(must=must_conditions) if must_conditions else None
 
-    # 3. Use more results if retrying
+    
     top_k = 10 if state.retry_mode else 8
 
-    # 4. Embed query and search
+   
     query_vec = model.encode([query_text])[0].tolist()
     hits = search_qdrant(query_vec, query_filter, top_k=top_k)
 
-    # 5. Convert to list of dicts
+    
     retrieved_chunks = []
     for hit in hits:
         retrieved_chunks.append({
@@ -82,7 +82,7 @@ def law_retriever(state: AgentState):
             "score": hit.score
         })
 
-    # 6. Tavily web search – expand if retrying
+    # 6. Tavily web search 
     web_results_text = ""
     try:
         location = state.jurisdiction.get("state", "") if state.jurisdiction else ""
@@ -94,11 +94,11 @@ def law_retriever(state: AgentState):
     except Exception as e:
         web_results_text = f"[Web search error: {e}]"
 
-    # 7. Store results
+    # Store results
     state.retrieved_chunks = retrieved_chunks
     state.web_search_results = web_results_text
 
-    # 8. Reset retry mode after the retry is complete
+    
     if state.retry_mode:
         state.retry_mode = False
 

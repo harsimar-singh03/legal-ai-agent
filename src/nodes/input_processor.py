@@ -2,7 +2,7 @@ import fitz  # PyMuPDF
 
 def input_processor(state):
 
-    # Check if user gave a PDF file
+    
     if state.document_path is not None:
 
         try:
@@ -26,5 +26,5 @@ def input_processor(state):
             # If error happens
             state.document_text = f"Error: {e}"
 
-    # Return updated state
+    
     return state

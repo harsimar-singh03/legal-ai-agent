@@ -15,7 +15,7 @@ def action_generator(state: AgentState):
     jurisdiction = state.jurisdiction or {}
     category = state.category or []
 
-    # Step 1 – Generate template with placeholders
+   
     prompt = f"""
 You are a legal document generator. Generate a formal document based on the provided legal reasoning. Choose the most appropriate type: legal notice, complaint letter, or action plan.
 
@@ -69,13 +69,13 @@ Return ONLY a JSON object like:
     content = data.get("content", "")
     
 
-     # Find placeholders
+    
     placeholders = re.findall(
         r"\[(.*?)\]",
         content
     )
 
-    # Remove duplicates while keeping order
+    
     unique_placeholders = []
 
     for ph in placeholders:
@@ -85,11 +85,11 @@ Return ONLY a JSON object like:
             unique_placeholders.append(ph)
 
 
-    # Store answers
+   
     answers = {}
 
 
-    # Ask user for values
+    
     for placeholder in unique_placeholders:
 
         question = f"Please provide: {placeholder}"

@@ -10,16 +10,16 @@ load_dotenv()
 client = Groq(api_key=os.getenv("GROQ_API_KEY"))
 
 def jurisdiction_detector(state: AgentState):
-    # If we already know the jurisdiction, skip this node
+    
     if state.jurisdiction and state.jurisdiction.get("state"):
         state.needs_clarification = False
         return state
 
-    # The original user problem is stored in state.user_query.
+    
     original_query = state.user_query
 
     while True:
-        # Build system prompt FIRST
+        
         system_prompt = f"""
 You are a legal assistant for Indian citizens. Your task is to determine the country and state from the user's description.
 The user initially described a problem, and may have provided their location in a follow‑up message.
@@ -38,10 +38,10 @@ Return ONLY a JSON object:
   "clarification_question": null
 }}
 """
-        # Place system prompt at index 0
+        
         messages = [{"role": "system", "content": system_prompt}]
         
-        # Then append conversation history
+        
         for msg in state.messages:
             messages.append({"role": msg["role"], "content": msg["content"]})
 
@@ -61,7 +61,7 @@ Return ONLY a JSON object:
             state.messages.append({"role": "assistant", "content": json.dumps(data)})
             return state
         else:
-            # Need clarification – pause the graph
+            
             new_info = interrupt(result.clarification_question)
             state.messages.append({"role": "assistant", "content": result.clarification_question})
             state.messages.append({"role": "user", "content": new_info})

@@ -24,7 +24,7 @@ def user_choice_router(state: AgentState):
     state.messages.append({"role": "assistant", "content": question})
     state.messages.append({"role": "user", "content": user_response})
 
-    # ── Use LLM to interpret the user's intent from free‑form text ──
+
     prompt = f"""
 A user was asked whether they want a ready‑to‑send legal document or a lawyer referral.
 Their exact response was:
@@ -54,6 +54,6 @@ Return ONLY a JSON object:
     data = json.loads(raw)
     intent = data.get("intent", "find_lawyer")
 
-    # Store the choice in state so we can route
+    
     state.user_choice = intent
     return state

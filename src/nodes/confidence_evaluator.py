@@ -9,7 +9,7 @@ def confidence_evaluator(state: AgentState):
     else:
         avg_score = 0.0
 
-    # Assign a confidence label (for display only)
+    
     if avg_score >= 0.6:
         confidence = "high"
     elif avg_score >= 0.4:
@@ -17,7 +17,7 @@ def confidence_evaluator(state: AgentState):
     else:
         confidence = "low"
 
-    # Downgrade if reasoning contains contradictions
+    
     reasoning = state.reasoning_chain or ""
     if any(phrase in reasoning.lower() for phrase in ["contradict", "conflicting", "not clear", "insufficient"]):
         if confidence == "high":
@@ -26,7 +26,7 @@ def confidence_evaluator(state: AgentState):
             confidence = "low"
 
     state.confidence_score = confidence
-    # No retry or escalation – user always chooses next step
+   
     state.retry_mode = False
     state.retry_count = 0
     return state

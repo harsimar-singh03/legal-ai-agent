@@ -7,7 +7,7 @@ load_dotenv()
 client = Groq(api_key=os.getenv("GROQ_API_KEY"))
 
 def legal_reasoner(state: AgentState):
-    # Build the law context from retrieved chunks
+    
     law_text = ""
     if state.retrieved_chunks:
         for i, chunk in enumerate(state.retrieved_chunks, 1):
@@ -20,12 +20,12 @@ def legal_reasoner(state: AgentState):
     else:
         law_text = "No specific law sections were retrieved. You must note this and recommend escalation to a lawyer."
 
-    # Add web search results if any
+    
     web_info = ""
     if state.web_search_results:
         web_info = f"Recent legal updates/web results:\n{state.web_search_results[:2000]}\n\n"
 
-    # Add document analysis if present
+    
     doc_info = ""
     if state.clause_analysis:
         doc_info = "Document clause analysis (risks flagged):\n"
@@ -37,7 +37,7 @@ def legal_reasoner(state: AgentState):
                 f"  Conflicting section: {ca.get('conflicting_section', 'N/A')}\n\n"
             )
 
-    # Build the prompt
+    # prompt
     prompt = f"""
 You are a legal reasoning engine for an Indian legal first-aid system. Your task is to analyse the user's situation using ONLY the legal information provided below. You must not invent any law or section that is not explicitly mentioned in the provided law chunks or web results.
 

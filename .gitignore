@@ -7,3 +7,10 @@ venv/
 .vscode/
 data/raw_acts/
 *.pdf
+
+scripts/
+src/chunker.py
+src/upload_to_qdrant.py
+src/create_indexes.py
+src/print_graph.py
+src/query_qdrant.py
