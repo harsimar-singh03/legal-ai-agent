@@ -65,7 +65,11 @@ defaults = {
     "pending_question": None,
     "graph_finished": False,
     "start_processing": False,
-    "pending_user_input": None
+    "pending_user_input": None,
+    # ── NEW: deferred answer slots so the user message
+    #         always appears on screen before processing begins
+    "pending_resume_answer": None,
+    "pending_followup": None,
 }
 
 for key, value in defaults.items():
@@ -106,6 +110,10 @@ def reset_session():
     st.session_state.start_processing = False
 
     st.session_state.pending_user_input = None
+
+    st.session_state.pending_resume_answer = None
+
+    st.session_state.pending_followup = None
 
     st.session_state.thread_id = (
         f"user_{int(time.time())}"
@@ -443,6 +451,8 @@ for role, msg in (
 # ─────────────────────────────────────────────
 # Run backend processing AFTER UI refresh
 # ─────────────────────────────────────────────
+
+# ── Deferred: initial submit ──────────────────
 if st.session_state.start_processing:
 
     st.session_state.start_processing = False
@@ -456,6 +466,51 @@ if st.session_state.start_processing:
         run_agent(
             user_input=user_input
         )
+
+    st.rerun()
+
+
+# ── Deferred: clarification answer ───────────
+# The user message was already added to chat_history and st.rerun()
+# was called, so the message is visible before we hit this block.
+if st.session_state.pending_resume_answer is not None:
+
+    resume_answer = (
+        st.session_state.pending_resume_answer
+    )
+
+    st.session_state.pending_resume_answer = None
+
+    with st.spinner("🧠 Thinking..."):
+
+        run_agent(
+            resume_answer=resume_answer
+        )
+
+    st.rerun()
+
+
+# ── Deferred: post-graph follow-up ────────────
+# Same pattern — message shown first, then we process here.
+if st.session_state.pending_followup is not None:
+
+    followup = (
+        st.session_state.pending_followup
+    )
+
+    st.session_state.pending_followup = None
+
+    with st.spinner("🧠 Thinking..."):
+
+        bot_reply = generate_post_graph_reply(
+            followup,
+            st.session_state.state
+        )
+
+    add_message(
+        "assistant",
+        bot_reply
+    )
 
     st.rerun()
 
@@ -498,13 +553,11 @@ if st.session_state.waiting_for_input:
             user_reply
         )
 
-        with st.spinner(
-            "🧠 Thinking..."
-        ):
-
-            run_agent(
-                resume_answer=user_reply
-            )
+        # Store the answer; deferred block above will pick it up
+        # on the NEXT rerun — after the message is already on screen.
+        st.session_state.pending_resume_answer = (
+            user_reply
+        )
 
         st.rerun()
 
@@ -525,20 +578,10 @@ elif st.session_state.graph_finished:
             user_reply
         )
 
-        with st.spinner(
-            "🧠 Thinking..."
-        ):
-
-            bot_reply = (
-                generate_post_graph_reply(
-                    user_reply,
-                    st.session_state.state
-                )
-            )
-
-        add_message(
-            "assistant",
-            bot_reply
+        # Store the question; deferred block above will pick it up
+        # on the NEXT rerun — after the message is already on screen.
+        st.session_state.pending_followup = (
+            user_reply
         )
 
         st.rerun()
