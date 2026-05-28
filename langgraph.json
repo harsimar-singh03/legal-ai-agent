@@ -1,0 +1,8 @@
+{
+  "graphs": {
+    "legal_agent": "./src/graph.py:app"
+  },
+  "python_path": ["./src"],
+  "env": ".env",
+  "dependencies": ["-r", "requirements.txt"]
+}

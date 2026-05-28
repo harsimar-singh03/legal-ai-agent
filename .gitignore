@@ -1,0 +1,9 @@
+.env
+checkpoints.db
+*.db
+__pycache__/
+*.pyc
+venv/
+.vscode/
+data/raw_acts/
+*.pdf

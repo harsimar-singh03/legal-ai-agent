@@ -1,0 +1,12 @@
+pymupdf
+pydantic
+sentence-transformers
+qdrant-client
+python-dotenv
+langgraph
+langchain-core
+groq
+tavily-python
+langgraph-checkpoint-sqlite
+streamlit
+fpdf2
