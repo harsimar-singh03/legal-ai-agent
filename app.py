@@ -24,12 +24,21 @@ sys.path.insert(0, str(Path(__file__).parent / "src"))
 # ─────────────────────────────────────────────
 # Load environment variables
 # ─────────────────────────────────────────────
+try:
+    import streamlit as st
+    if hasattr(st, "secrets") and "GROQ_API_KEY" in st.secrets:
+        for key in ["GROQ_API_KEY", "QDRANT_URL", "QDRANT_API_KEY", "TAVILY_API_KEY",
+                     "LANGCHAIN_TRACING_V2", "LANGCHAIN_PROJECT", "LANGCHAIN_API_KEY"]:
+            if key in st.secrets:
+                os.environ[key] = st.secrets[key]
+except Exception:
+    pass  # not on Streamlit Cloud, .env will be loaded by dotenv
+
 load_dotenv()
 
 groq_client = Groq(
     api_key=os.getenv("GROQ_API_KEY")
 )
-
 
 # ─────────────────────────────────────────────
 # Streamlit page setup
