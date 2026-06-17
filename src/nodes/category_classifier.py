@@ -16,13 +16,7 @@ def category_classifier(state: AgentState):
         state.needs_clarification = False
         return state
 
-    original_query = state.user_query
-
     while True:
-        location_info = "Unknown"
-        if state.jurisdiction:
-            location_info = f"{state.jurisdiction.get('state', 'Unknown')}, {state.jurisdiction.get('country', 'Unknown')}"
-
         system_prompt = f"""
 You are a legal category classifier for an Indian legal first‑aid system. Your job is to assign the user's problem to one or more of these legal categories: {', '.join(VALID_CATEGORIES)}.
 
