@@ -46,10 +46,11 @@ Return ONLY a JSON object:
             messages.append({"role": msg["role"], "content": msg["content"]})
 
         response = client.chat.completions.create(
-            model="llama-3.1-8b-instant",
+            model="openai/gpt-oss-120b",
             messages=messages,
             temperature=0.0,
-            response_format={"type": "json_object"}
+            response_format={"type": "json_object"},
+            reasoning_format="hidden"
         )
         data = json.loads(response.choices[0].message.content)
         result = JurisdictionOutput(**data)

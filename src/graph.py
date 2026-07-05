@@ -1,4 +1,5 @@
 import sqlite3
+import re
 from langgraph.graph import StateGraph, END
 from langgraph.checkpoint.sqlite import SqliteSaver
 from state import AgentState
@@ -29,6 +30,13 @@ def after_user_choice(state: AgentState):
     if state.user_choice == "generate_document":
         return "action"
     return "escalate"
+
+
+def after_action_generator(state: AgentState):
+    text = state.action_output or ""
+    for match in re.finditer(r"\[(?!LEGAL_NOTICE|COMPLAINT_LETTER|ACTION_PLAN)(.*?)\]", text):
+        return "loop"
+    return "end"
 
 def build_graph():
     graph = StateGraph(AgentState)
@@ -77,7 +85,14 @@ def build_graph():
         }
     )
 
-    graph.add_edge("action_generator", END)
+    graph.add_conditional_edges(
+        "action_generator",
+        after_action_generator,
+        {
+            "loop": "action_generator",
+            "end": END
+        }
+    )
     graph.add_edge("escalation_handler", END)
 
     return graph

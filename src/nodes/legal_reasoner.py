@@ -77,10 +77,11 @@ Remember: if the provided legal information does not support a definitive answer
     ]
 
     response = client.chat.completions.create(
-        model="llama-3.1-8b-instant",
+        model="openai/gpt-oss-120b",
         messages=messages,
         temperature=0.0,
-        max_tokens=1024
+        max_tokens=1024,
+        reasoning_format="hidden"
     )
 
     reasoning = response.choices[0].message.content

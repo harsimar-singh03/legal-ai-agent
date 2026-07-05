@@ -310,7 +310,7 @@ def generate_reply(
     response = (
         groq_client.chat.completions.create(
 
-            model="llama-3.1-8b-instant",
+            model="openai/gpt-oss-120b",
 
             messages=[
                 {
@@ -325,7 +325,8 @@ def generate_reply(
 
             temperature=0.7,
 
-            max_tokens=400
+            max_tokens=400,
+            reasoning_format="hidden"
         )
     )
 

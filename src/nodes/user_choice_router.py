@@ -41,13 +41,14 @@ Return ONLY a JSON object:
 }}
 """
     response = client.chat.completions.create(
-        model="llama-3.1-8b-instant",
+        model="openai/gpt-oss-120b",
         messages=[
             {"role": "system", "content": "You are an intent classifier. Output only valid JSON."},
             {"role": "user", "content": prompt}
         ],
         temperature=0.0,
-        response_format={"type": "json_object"}
+        response_format={"type": "json_object"},
+        reasoning_format="hidden"
     )
 
     raw = response.choices[0].message.content
