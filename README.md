@@ -56,7 +56,7 @@ A **9-node LangGraph state machine** with human-in-the-loop interrupts and condi
 | Layer | Technology |
 |-------|-----------|
 | **Orchestration** | LangGraph (StateGraph, interrupt/resume, SqliteSaver checkpointing) |
-| **LLM** | Groq `llama-3.1-8b-instant` (fast inference, JSON mode) |
+| **LLM** | Groq `GPT-OSS 120B` (fast inference, JSON mode) |
 | **Embeddings** | `all-MiniLM-L6-v2` — 384-dim, local via sentence-transformers |
 | **Vector DB** | Qdrant Cloud (cosine similarity, metadata-filtered search) |
 | **Web Search** | Tavily API |
