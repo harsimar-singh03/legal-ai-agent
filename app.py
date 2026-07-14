@@ -325,7 +325,7 @@ def generate_reply(
 
             temperature=0.7,
 
-            max_tokens=400,
+            max_tokens=2048,
             reasoning_format="hidden"
         )
     )
@@ -375,8 +375,9 @@ User message:
 "{user_text}"
 
 Answer briefly and helpfully.
-
 Stay within Indian law.
+
+Language Rule: If the user's message is written in Hindi or Hinglish (transliterated Hindi), you must reply in Hindi (Devanagari script). Otherwise, reply in English.
 """
 
     return generate_reply(

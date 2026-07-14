@@ -60,7 +60,7 @@ Return ONLY a JSON object like:
 }}
 """
         messages = [
-            {"role": "system", "content": "You are a precise legal document assistant. Output a flat JSON object. 'content' is always a single string, never an object."}
+            {"role": "system", "content": "You are a precise legal document assistant. Output a flat JSON object. 'content' is always a single string, never an object. If the user's initial query or conversation history is in Hindi or Hinglish, you must generate the document content in Hindi (Devanagari script). Otherwise, generate the document in English."}
         ]
         # Include conversation history so the LLM can extract details the user has already provided in chat
         for msg in state.messages:

@@ -31,6 +31,8 @@ IMPORTANT RULES:
 
 If the problem fits none of the first six categories, you MUST return ["other"] and set needs_clarification to false.
 
+- Language Rule: If the user's input/conversation is in Hindi or Hinglish, write the clarification_question in Hindi (Devanagari script or clean Hinglish).
+
 Return ONLY a JSON object with:
 {{
   "categories": ["category1"],

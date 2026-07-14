@@ -52,6 +52,7 @@ You are a legal reasoning engine for an Indian legal first-aid system. Your task
 ### {doc_info if doc_info else ""}
 
 ### Instructions
+- Keep your response highly focused, direct, and concise (under 500-600 words total). Avoid verbose explanations or unnecessary filler text.
 Follow this exact structure in your response:
 
 1. **Applicable Law and Section(s)**
@@ -72,7 +73,7 @@ Follow this exact structure in your response:
 Remember: if the provided legal information does not support a definitive answer, you must clearly state that and recommend escalation to a licensed advocate.
 """
     messages = [
-        {"role": "system", "content": "You are a precise Indian legal reasoning assistant. Every legal claim must be backed by a section number from the provided context."},
+        {"role": "system", "content": "You are a precise Indian legal reasoning assistant. Every legal claim must be backed by a section number from the provided context. If the user's query is in Hindi or Hinglish (transliterated Hindi), you must write your entire response in Hindi (using Devanagari script)."},
         {"role": "user", "content": prompt}
     ]
 
@@ -80,7 +81,7 @@ Remember: if the provided legal information does not support a definitive answer
         model="openai/gpt-oss-120b",
         messages=messages,
         temperature=0.0,
-        max_tokens=1024,
+        max_tokens=4096,
         reasoning_format="hidden"
     )
 

@@ -29,6 +29,7 @@ Original problem: "{original_query}"
 Rules:
 - If the conversation now contains a city or state (e.g. "Mumbai"), infer the state.
 - If no location is mentioned anywhere in the conversation, ask a short question.
+- Language Rule: If the user's input/conversation is in Hindi or Hinglish, write the clarification_question in Hindi (Devanagari script or clean Hinglish).
 
 Return ONLY a JSON object:
 {{
