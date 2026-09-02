@@ -1,6 +1,9 @@
 .env
 checkpoints.db
+checkpoints.db-shm
+checkpoints.db-wal
 *.db
+*.db-*
 __pycache__/
 *.pyc
 venv/
