@@ -1,37 +1,38 @@
+import os
 import sys
+import tempfile
+import time
 from pathlib import Path
 
-sys.path.insert(0, str(Path(__file__).parent / "src"))
-
-import os
-import time
-import tempfile
-
-import streamlit as st
 from dotenv import load_dotenv
-from groq import Groq
 from fpdf import FPDF
-
-from src.state import AgentState
-from src.graph import app
+from groq import Groq
 from langgraph.types import Command
-
+import streamlit as st
 
 # Add src folder to path
 sys.path.insert(0, str(Path(__file__).parent / "src"))
 
+from src.graph import app
+from src.state import AgentState
 
 # ─────────────────────────────────────────────
 # Load environment variables
 # ─────────────────────────────────────────────
 try:
-    import streamlit as st
     if hasattr(st, "secrets") and "GROQ_API_KEY" in st.secrets:
-        for key in ["GROQ_API_KEY", "QDRANT_URL", "QDRANT_API_KEY", "TAVILY_API_KEY",
-                     "LANGCHAIN_TRACING_V2", "LANGCHAIN_PROJECT", "LANGCHAIN_API_KEY"]:
+        for key in [
+            "GROQ_API_KEY",
+            "QDRANT_URL",
+            "QDRANT_API_KEY",
+            "TAVILY_API_KEY",
+            "LANGCHAIN_TRACING_V2",
+            "LANGCHAIN_PROJECT",
+            "LANGCHAIN_API_KEY",
+        ]:
             if key in st.secrets:
                 os.environ[key] = st.secrets[key]
-except Exception:
+except (AttributeError, KeyError, Exception):
     pass  # not on Streamlit Cloud, .env will be loaded by dotenv
 
 load_dotenv()
