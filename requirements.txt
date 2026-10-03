@@ -10,3 +10,6 @@ tavily-python
 langgraph-checkpoint-sqlite
 streamlit
 fpdf2
+fastapi
+uvicorn
+python-multipart

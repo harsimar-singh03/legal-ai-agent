@@ -1,0 +1,388 @@
+<!DOCTYPE html>
+<html lang="en" class="dark">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Indian Legal First-Aid Agent | AI Statutory Triage & Notice Drafter</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <style>
+    body { font-family: 'Inter', sans-serif; }
+    code, pre { font-family: 'JetBrains Mono', monospace; }
+    .prose h1, .prose h2, .prose h3 { font-weight: 700; margin-top: 0.9rem; margin-bottom: 0.5rem; color: #f8fafc; }
+    .prose h3 { font-size: 1.05rem; color: #fbbf24; }
+    .prose p { margin-bottom: 0.65rem; line-height: 1.65; }
+    .prose ul, .prose ol { margin-left: 1.25rem; margin-bottom: 0.75rem; }
+    .prose ul { list-style-type: disc; }
+    .prose ol { list-style-type: decimal; }
+    .prose li { margin-bottom: 0.3rem; }
+    .prose strong { color: #f1f5f9; font-weight: 600; }
+    .prose code { background: #1e293b; padding: 0.15rem 0.35rem; border-radius: 0.25rem; font-size: 0.85em; color: #fcd34d; }
+    .prose pre { background: #0f172a; border: 1px solid #334155; padding: 0.85rem; border-radius: 0.5rem; overflow-x: auto; margin-bottom: 0.75rem; }
+    .prose hr { border-color: #334155; margin: 1rem 0; }
+    .prose a { color: #38bdf8; text-decoration: underline; }
+    ::-webkit-scrollbar { width: 6px; height: 6px; }
+    ::-webkit-scrollbar-track { background: #0f172a; }
+    ::-webkit-scrollbar-thumb { background: #334155; border-radius: 3px; }
+  </style>
+</head>
+<body class="bg-slate-950 text-slate-100 h-screen flex overflow-hidden">
+
+  <!-- Left Sidebar -->
+  <aside class="w-80 bg-slate-900 border-r border-slate-800 flex flex-col justify-between shrink-0 hidden md:flex">
+    <div class="p-5 space-y-5 overflow-y-auto">
+      <!-- Brand Header -->
+      <div class="flex items-center justify-between">
+        <div class="flex items-center space-x-2.5">
+          <div class="w-9 h-9 rounded-lg bg-amber-500/15 border border-amber-500/40 flex items-center justify-center text-amber-400 text-lg font-bold">
+            ⚖️
+          </div>
+          <div>
+            <h1 class="font-bold text-sm tracking-tight text-white">Legal First-Aid AI</h1>
+            <p class="text-[11px] text-slate-400">9-Node LangGraph • Qdrant RAG</p>
+          </div>
+        </div>
+        <span class="text-[10px] font-mono uppercase px-2 py-0.5 rounded bg-emerald-500/15 text-emerald-400 border border-emerald-500/30">
+          120B LPU
+        </span>
+      </div>
+
+      <!-- New Case Button -->
+      <button onclick="resetSession()" class="w-full py-2.5 px-4 rounded-lg bg-slate-800 hover:bg-slate-700 border border-slate-700 text-xs font-medium text-slate-200 flex items-center justify-center space-x-2 transition">
+        <span>＋ Start New Legal Case</span>
+      </button>
+
+      <!-- Live Case Telemetry -->
+      <div class="bg-slate-950/70 border border-slate-800 rounded-xl p-3.5 space-y-3">
+        <div class="flex items-center justify-between">
+          <span class="text-[11px] font-semibold uppercase tracking-wider text-slate-400">Live Case Telemetry</span>
+          <span id="statusDot" class="w-2 h-2 rounded-full bg-emerald-400"></span>
+        </div>
+
+        <div class="space-y-2 text-xs">
+          <div class="flex justify-between items-center py-1 border-b border-slate-800/80">
+            <span class="text-slate-400">State / Jurisdiction</span>
+            <span id="telemetryJurisdiction" class="font-mono text-amber-400">Auto-detecting...</span>
+          </div>
+          <div class="flex justify-between items-center py-1 border-b border-slate-800/80">
+            <span class="text-slate-400">Legal Domain</span>
+            <span id="telemetryCategory" class="font-mono text-sky-400">Awaiting query</span>
+          </div>
+          <div class="flex justify-between items-center py-1">
+            <span class="text-slate-400">Graph Status</span>
+            <span id="telemetryPhase" class="font-mono text-emerald-400">Ready</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Contract Upload Box -->
+      <div class="bg-slate-950/70 border border-slate-800 rounded-xl p-3.5 space-y-2.5">
+        <div class="flex items-center justify-between">
+          <span class="text-[11px] font-semibold uppercase tracking-wider text-slate-400">📄 Contract / Lease Audit</span>
+          <span class="text-[10px] text-slate-500">Optional PDF</span>
+        </div>
+        <p class="text-[11px] text-slate-400 leading-relaxed">
+          Upload a rental agreement or employment contract for clause-by-clause statutory risk flagging.
+        </p>
+        <label class="block cursor-pointer">
+          <input type="file" id="pdfInput" accept=".pdf" class="hidden" onchange="handleFileUpload(event)" />
+          <div class="border border-dashed border-slate-700 hover:border-amber-500/60 rounded-lg p-3 text-center transition bg-slate-900/60">
+            <p id="uploadLabel" class="text-xs text-slate-300 font-medium">📎 Click to attach PDF agreement</p>
+          </div>
+        </label>
+      </div>
+
+      <!-- Quick Sample Cases -->
+      <div class="space-y-2">
+        <span class="text-[11px] font-semibold uppercase tracking-wider text-slate-400">⚡ Try Sample Scenarios</span>
+        <button onclick="useSample('I rented a flat in Mumbai and vacated last month after 30 days notice, but my landlord refuses to return my Rs 75,000 security deposit.')"
+          class="w-full text-left p-2.5 rounded-lg bg-slate-950/60 hover:bg-slate-800/80 border border-slate-800 text-xs text-slate-300 transition">
+          🏠 <strong class="text-amber-400">Tenancy:</strong> Mumbai security deposit withheld
+        </button>
+        <button onclick="useSample('I bought a laptop in Delhi for Rs 65,000. Within 4 days the motherboard failed and the shop refuses replacement or refund.')"
+          class="w-full text-left p-2.5 rounded-lg bg-slate-950/60 hover:bg-slate-800/80 border border-slate-800 text-xs text-slate-300 transition">
+          💻 <strong class="text-sky-400">Consumer:</strong> Defective laptop refund denied
+        </button>
+        <button onclick="useSample('Bhaiya mere landlord ne Delhi mein bina notice diye ghar khali karne bola hai, kya karu?')"
+          class="w-full text-left p-2.5 rounded-lg bg-slate-950/60 hover:bg-slate-800/80 border border-slate-800 text-xs text-slate-300 transition">
+          🇮🇳 <strong class="text-emerald-400">Hinglish:</strong> Unlawful eviction threat in Delhi
+        </button>
+      </div>
+    </div>
+
+    <!-- Footer Links -->
+    <div class="p-4 border-t border-slate-800 bg-slate-950/50 flex items-center justify-between text-xs text-slate-400">
+      <a href="/docs" target="_blank" class="hover:text-amber-400 transition flex items-center space-x-1">
+        <span>🔌 REST API (/docs)</span>
+      </a>
+      <a href="https://github.com/harsimar-singh03/legal-ai-agent" target="_blank" class="hover:text-white transition">
+        GitHub ↗
+      </a>
+    </div>
+  </aside>
+
+  <!-- Main Workspace -->
+  <main class="flex-1 flex flex-col h-full bg-slate-950">
+    <!-- Top Header -->
+    <header class="h-14 border-b border-slate-800 px-6 flex items-center justify-between bg-slate-900/50 backdrop-blur shrink-0">
+      <div class="flex items-center space-x-3">
+        <span class="text-sm font-semibold text-slate-200">Statutory Consultation & Notice Drafting</span>
+        <span class="hidden sm:inline-block text-xs text-slate-500">• Grounded in 8 Indian Bare Acts (2,300+ Sections) + Supreme Court Search</span>
+      </div>
+      <div class="flex items-center space-x-3">
+        <button id="downloadPdfBtn" onclick="downloadPdf()" class="hidden px-3.5 py-1.5 rounded-lg bg-amber-500 hover:bg-amber-400 text-slate-950 font-semibold text-xs shadow-lg shadow-amber-500/20 transition flex items-center space-x-1.5">
+          <span>📥 Download Legal Notice PDF</span>
+        </button>
+      </div>
+    </header>
+
+    <!-- Chat Messages Container -->
+    <div id="chatContainer" class="flex-1 overflow-y-auto p-6 space-y-5">
+      <!-- Welcome Banner -->
+      <div class="max-w-3xl mx-auto bg-slate-900/90 border border-slate-800 rounded-2xl p-6 space-y-3">
+        <div class="flex items-center space-x-2 text-amber-400 font-semibold text-sm">
+          <span>⚖️ Indian Legal First-Aid Triage</span>
+        </div>
+        <p class="text-sm text-slate-300 leading-relaxed">
+          Describe your legal issue in plain <strong>English</strong> or <strong>Hindi/Hinglish</strong>. The agent will detect your state jurisdiction, retrieve exact sections from Indian Bare Acts & recent Supreme Court judgments, audit any uploaded PDF agreement, and draft a ready-to-send <strong>Legal Notice</strong>.
+        </p>
+        <div class="flex flex-wrap gap-2 pt-1 text-[11px] text-slate-400">
+          <span class="px-2.5 py-1 rounded-full bg-slate-950 border border-slate-800">Consumer Protection Act</span>
+          <span class="px-2.5 py-1 rounded-full bg-slate-950 border border-slate-800">State Rent Control Acts</span>
+          <span class="px-2.5 py-1 rounded-full bg-slate-950 border border-slate-800">IT Act (Cyber Fraud)</span>
+          <span class="px-2.5 py-1 rounded-full bg-slate-950 border border-slate-800">Payment of Wages Act</span>
+          <span class="px-2.5 py-1 rounded-full bg-slate-950 border border-slate-800">POSH Act 2013</span>
+          <span class="px-2.5 py-1 rounded-full bg-slate-950 border border-slate-800">RTI Act 2005</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Quick Choice Action Bar (Shown only during user_choice_router interrupt) -->
+    <div id="choiceBar" class="hidden px-6 py-3 bg-slate-900/90 border-t border-slate-800">
+      <div class="max-w-3xl mx-auto flex flex-wrap items-center justify-between gap-3">
+        <span class="text-xs text-amber-400 font-medium">⚡ Select your preferred next step:</span>
+        <div class="flex space-x-3">
+          <button onclick="sendQuickChoice('Generate a legal notice document for me')"
+            class="px-4 py-2 rounded-lg bg-amber-500 hover:bg-amber-400 text-slate-950 font-semibold text-xs transition">
+            📄 1. Generate Ready-to-Send Legal Notice
+          </button>
+          <button onclick="sendQuickChoice('Help me find a licensed advocate')"
+            class="px-4 py-2 rounded-lg bg-slate-800 hover:bg-slate-700 border border-slate-700 text-slate-200 font-medium text-xs transition">
+            🏛️ 2. Escalate to Licensed Advocate / NALSA
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Bottom Input Bar -->
+    <div class="p-4 border-t border-slate-800 bg-slate-900/60">
+      <form onsubmit="handleSubmit(event)" class="max-w-3xl mx-auto flex items-center space-x-3">
+        <input
+          id="chatInput"
+          type="text"
+          placeholder="Describe your legal issue or answer the agent's question..."
+          autocomplete="off"
+          class="flex-1 bg-slate-950 border border-slate-800 focus:border-amber-500/70 focus:outline-none rounded-xl px-4 py-3 text-sm text-slate-100 placeholder-slate-500"
+        />
+        <button
+          id="sendBtn"
+          type="submit"
+          class="px-5 py-3 rounded-xl bg-amber-500 hover:bg-amber-400 disabled:opacity-50 text-slate-950 font-semibold text-sm transition shrink-0"
+        >
+          Send →
+        </button>
+      </form>
+    </div>
+  </main>
+
+  <script>
+    let threadId = "case_" + Date.now();
+    let isWaitingForInput = false;
+
+    function appendMessage(role, markdownText) {
+      const container = document.getElementById("chatContainer");
+      const wrapper = document.createElement("div");
+      wrapper.className = "max-w-3xl mx-auto flex " + (role === "user" ? "justify-end" : "justify-start");
+
+      const bubble = document.createElement("div");
+      if (role === "user") {
+        bubble.className = "bg-amber-500 text-slate-950 font-medium px-4 py-3 rounded-2xl rounded-br-sm max-w-xl text-sm shadow";
+        bubble.textContent = markdownText;
+      } else {
+        bubble.className = "bg-slate-900 border border-slate-800 text-slate-200 px-5 py-4 rounded-2xl rounded-bl-sm max-w-2xl text-sm prose shadow-md";
+        bubble.innerHTML = marked.parse(markdownText);
+      }
+
+      wrapper.appendChild(bubble);
+      container.appendChild(wrapper);
+      container.scrollTop = container.scrollHeight;
+    }
+
+    function showLoadingIndicator() {
+      const container = document.getElementById("chatContainer");
+      const loader = document.createElement("div");
+      loader.id = "loadingBubble";
+      loader.className = "max-w-3xl mx-auto flex justify-start";
+      loader.innerHTML = `
+        <div class="bg-slate-900 border border-slate-800 text-slate-400 px-4 py-3 rounded-2xl text-xs flex items-center space-x-2.5">
+          <span class="w-2 h-2 rounded-full bg-amber-400 animate-ping"></span>
+          <span>Running LangGraph nodes (Qdrant Vector Search + Groq 120B LPU)...</span>
+        </div>
+      `;
+      container.appendChild(loader);
+      container.scrollTop = container.scrollHeight;
+    }
+
+    function removeLoadingIndicator() {
+      const loader = document.getElementById("loadingBubble");
+      if (loader) loader.remove();
+    }
+
+    function updateTelemetry(data) {
+      if (data.jurisdiction && data.jurisdiction.state) {
+        document.getElementById("telemetryJurisdiction").textContent =
+          `${data.jurisdiction.state}, ${data.jurisdiction.country || "India"}`;
+      }
+      if (data.category && data.category.length > 0) {
+        document.getElementById("telemetryCategory").textContent = data.category.join(", ");
+      }
+      const phaseEl = document.getElementById("telemetryPhase");
+      if (data.waiting_for_input) {
+        phaseEl.textContent = "Awaiting Input";
+        phaseEl.className = "font-mono text-amber-400";
+      } else if (data.graph_finished) {
+        phaseEl.textContent = "Completed";
+        phaseEl.className = "font-mono text-emerald-400";
+      }
+
+      const choiceBar = document.getElementById("choiceBar");
+      if (data.is_choice_prompt) {
+        choiceBar.classList.remove("hidden");
+      } else {
+        choiceBar.classList.add("hidden");
+      }
+
+      const pdfBtn = document.getElementById("downloadPdfBtn");
+      if (data.has_pdf_download) {
+        pdfBtn.classList.remove("hidden");
+      } else {
+        pdfBtn.classList.add("hidden");
+      }
+    }
+
+    async function sendMessage(text) {
+      if (!text.trim()) return;
+      const inputEl = document.getElementById("chatInput");
+      const sendBtn = document.getElementById("sendBtn");
+
+      appendMessage("user", text);
+      inputEl.value = "";
+      sendBtn.disabled = true;
+      document.getElementById("choiceBar").classList.add("hidden");
+      showLoadingIndicator();
+
+      try {
+        const endpoint = isWaitingForInput ? "/api/resume" : "/api/chat";
+        const payload = isWaitingForInput
+          ? { thread_id: threadId, answer: text }
+          : { thread_id: threadId, message: text };
+
+        const res = await fetch(endpoint, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(payload),
+        });
+
+        const data = await res.json();
+        removeLoadingIndicator();
+
+        if (data.replies && data.replies.length > 0) {
+          for (const reply of data.replies) {
+            appendMessage("assistant", reply);
+          }
+        }
+
+        isWaitingForInput = data.waiting_for_input;
+        updateTelemetry(data);
+      } catch (err) {
+        removeLoadingIndicator();
+        appendMessage("assistant", "⚠️ **Error communicating with server:** " + err.message);
+      } finally {
+        sendBtn.disabled = false;
+        inputEl.focus();
+      }
+    }
+
+    function handleSubmit(e) {
+      e.preventDefault();
+      const inputEl = document.getElementById("chatInput");
+      sendMessage(inputEl.value);
+    }
+
+    function sendQuickChoice(choiceText) {
+      sendMessage(choiceText);
+    }
+
+    function useSample(sampleText) {
+      document.getElementById("chatInput").value = sampleText;
+      sendMessage(sampleText);
+    }
+
+    async function handleFileUpload(event) {
+      const file = event.target.files[0];
+      if (!file) return;
+      const label = document.getElementById("uploadLabel");
+      label.textContent = "⏳ Uploading " + file.name + "...";
+
+      const formData = new FormData();
+      formData.append("thread_id", threadId);
+      formData.append("file", file);
+
+      try {
+        const res = await fetch("/api/upload", {
+          method: "POST",
+          body: formData,
+        });
+        if (!res.ok) throw new Error("Upload failed");
+        const data = await res.json();
+        label.innerHTML = `<span class="text-emerald-400">✅ Attached: ${data.filename}</span>`;
+      } catch (err) {
+        label.innerHTML = `<span class="text-rose-400">❌ Upload failed</span>`;
+      }
+    }
+
+    function downloadPdf() {
+      window.open(`/api/download-pdf/${threadId}`, "_blank");
+    }
+
+    async function resetSession() {
+      const res = await fetch("/api/reset", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ thread_id: threadId }),
+      });
+      const data = await res.json();
+      threadId = data.thread_id;
+      isWaitingForInput = false;
+
+      document.getElementById("telemetryJurisdiction").textContent = "Auto-detecting...";
+      document.getElementById("telemetryCategory").textContent = "Awaiting query";
+      document.getElementById("telemetryPhase").textContent = "Ready";
+      document.getElementById("uploadLabel").textContent = "📎 Click to attach PDF agreement";
+      document.getElementById("downloadPdfBtn").classList.add("hidden");
+      document.getElementById("choiceBar").classList.add("hidden");
+
+      const container = document.getElementById("chatContainer");
+      container.innerHTML = `
+        <div class="max-w-3xl mx-auto bg-slate-900/90 border border-slate-800 rounded-2xl p-6 space-y-2">
+          <div class="text-amber-400 font-semibold text-sm">🔄 New Case Session Initialized</div>
+          <p class="text-xs text-slate-400">Describe your legal problem or upload a PDF contract to begin.</p>
+        </div>
+      `;
+    }
+  </script>
+</body>
+</html>
