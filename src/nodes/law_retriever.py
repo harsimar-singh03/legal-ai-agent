@@ -19,7 +19,7 @@ qdrant = QdrantClient(
     timeout=4,
     check_compatibility=False,
 )
-model = SentenceTransformer("all-MiniLM-L6-v2")
+model = SentenceTransformer("all-MiniLM-L6-v2", device="cpu")
 tavily = TavilyClient(api_key=os.getenv("TAVILY_API_KEY"))
 
 COLLECTION_NAME = "indian_laws"

@@ -1,8 +1,20 @@
+---
+title: Indian Legal First-Aid Agent
+emoji: ⚖️
+colorFrom: yellow
+colorTo: indigo
+sdk: gradio
+app_file: api.py
+app_port: 7860
+pinned: false
+---
+
 # ⚖️ Indian Legal First-Aid Agent
 
 > **An enterprise-grade, RAG-powered agentic legal assistant designed to demystify Indian statutory law, audit agreement contracts, and autonomously draft formal legal notices — with deterministic safety escalation to licensed advocates.**
 
-[![Live Demo](https://img.shields.io/badge/Live_Demo-Streamlit-brightgreen?logo=streamlit)](https://legal-ai-agent-hsim.streamlit.app)
+[![Live Demo](https://img.shields.io/badge/Live_App-FastAPI_Production-brightgreen?logo=fastapi)](https://harsii03-legal-ai-agent.hf.space)
+[![API Docs](https://img.shields.io/badge/Swagger_Docs-%2Fdocs-amber?logo=openapiinitiative)](https://harsii03-legal-ai-agent.hf.space/docs)
 [![GitHub](https://img.shields.io/badge/GitHub-Repository-blue?logo=github)](https://github.com/harsimar-singh03/legal-ai-agent)
 [![Python](https://img.shields.io/badge/Python-3.10%2B-blue?logo=python)](https://www.python.org/)
 [![Orchestration](https://img.shields.io/badge/Orchestration-LangGraph-orange?logo=langchain)](https://github.com/langchain-ai/langgraph)

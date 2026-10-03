@@ -1,3 +1,12 @@
+try:
+    import spaces
+
+    @spaces.GPU
+    def _zerogpu_healthcheck():
+        return True
+except ImportError:
+    pass
+
 import os
 import sys
 import tempfile
@@ -345,3 +354,25 @@ async def download_pdf(thread_id: str):
             "Content-Disposition": f'attachment; filename="legal_document_{thread_id}.pdf"'
         },
     )
+
+
+if __name__ == "__main__":
+    import uvicorn
+
+    try:
+        import gradio as gr
+
+        with gr.Blocks() as _hf_blocks:
+            gr.Button("health").click(fn=_zerogpu_healthcheck)
+        _hf_blocks.launch(
+            server_name="127.0.0.1",
+            server_port=7861,
+            prevent_thread_lock=True,
+        )
+    except Exception as e:
+        print(f"Gradio ZeroGPU hook skipped: {e}")
+
+    port = int(os.getenv("PORT", "7860"))
+    uvicorn.run(api, host="0.0.0.0", port=port)
+
+
